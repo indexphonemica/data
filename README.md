@@ -53,6 +53,8 @@ In some cases, phonemes may be too underspecified or under-described to be easil
 
 In cases where an entire cluster or sequence has a specific realization, such as English /nð/ > [n̪ː], join the source phonemes in the sequence with a plus sign: `n+ð > n̪ː`.
 
+For cases of free variation, replace the `>` with `~`.
+
 # Non-IPA conventions
 
 For fricated or 'super-close' vowels such as the 'apical vowel' of Mandarin, use the Sinological characters: `ɿ` instead of `i̝` or `z̩`, `ʮ` instead of `y̝` or `ʑ̩ʷ`, and so on. For the fricated back rounded vowel, use `ꭒ` instead of `v̩`.
