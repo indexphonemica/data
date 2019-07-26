@@ -113,11 +113,11 @@ glottolog = IDEAL
 url = IDEAL
 author = OPTIONAL (but REQUIRED if there's no glottolog ID)
 title = OPTIONAL (but REQUIRED if there's no glottolog ID)
-publisher = OPTIONAL (but REQUIRED if there's no glottolog ID)
-volume = OPTIONAL (but REQUIRED if there's no glottolog ID)
-number = OPTIONAL (but REQUIRED if there's no glottolog ID)
+publisher = OPTIONAL
+volume = OPTIONAL
+number = OPTIONAL
 year = OPTIONAL (but REQUIRED if there's no glottolog ID)
-pages = OPTIONAL (but REQUIRED if there's no glottolog ID)
+pages = OPTIONAL
 
 [phonemes]
 REQUIRED
