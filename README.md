@@ -128,3 +128,9 @@ REQUIRED
 PHONEME > IPA_REALIZATION / DESCRIPTION_OF_ENVIRONMENT
 PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
 ```
+
+# Scripts
+
+## `add.py`
+
+A script to create a blank doculect file. Usage: `>python add.py <glottocode>`. Prints the name of the created file.
