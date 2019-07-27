@@ -1,0 +1,39 @@
+[core]
+name = Menominee
+glottocode = meno1252
+notes = # check bloomfield '62, there are a damned lot of random rules
+
+[source]
+glottolog = 153404
+author = Bloomfield, Leonard
+title = The Menomini Language
+publisher = Yale University Press
+year = 1962
+
+[phonemes]
+
+p
+t
+tʃ
+k
+ʔ
+m
+n
+s
+h
+w
+j
+
+a
+æ
+ɪ
+i
+o|u
+aː
+æː
+ɪː
+iː
+oː|uː
+
+[allophonic_rules]
+# too goddamn baroque for right now, will do later
