@@ -13,7 +13,6 @@ if not re.match('[a-z]{4}[0-9]{4}', glottocode):
 blank_file = """[core]
 name = REQUIRED
 glottocode = REQUIRED
-notes = OPTIONAL
 dialect = OPTIONAL
 
 [source]
@@ -26,6 +25,9 @@ volume = OPTIONAL
 number = OPTIONAL
 year = OPTIONAL (but REQUIRED if there's no glottolog ID)
 pages = OPTIONAL
+
+[notes]
+OPTIONAL
 
 [phonemes]
 REQUIRED

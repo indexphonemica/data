@@ -4,12 +4,12 @@
 
 Doculect entries are stored as Python INI files, named with the Glottocode of the language followed by a hyphen and an index number: `1` for the first entry for that Glottocode, `2` for the second, etc. 
 
-Entry files have four headers: `core`, `source`, `phonemes`, and `allophonic_rules`. 
+Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes`, and `allophonic_rules`.
 
 ### `core`
 
 `core` stores two required attributes:
-- `name`: the name of the doculect as given in the document
+- `name`: the name of the doculect as given in the source
 - `glottocode`: the Glottocode of the language
 
 And two optional attributes:
@@ -30,6 +30,10 @@ And two optional attributes:
 - `pages`
 
 Enough information should be given that the paper can be found. At the minimum, a Glottolog ID should be provided if one is available; other information can then be added automatically from Glottolog when a numbered release of the Index is built.
+
+### `notes`
+
+`notes` stores notes relevant to the doculect entry. (For TODOs, add the literal string TODO.)
 
 ### `phonemes`
 
