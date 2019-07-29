@@ -12,7 +12,7 @@ if not re.match('[a-z]{4}[0-9]{4}', glottocode):
 
 blank_file = """[core]
 name = REQUIRED
-glottocode = REQUIRED
+glottocode = {}
 dialect = OPTIONAL
 
 [source]
@@ -37,7 +37,7 @@ PHONEME > IPA_REALIZATION / DESCRIPTION_OF_ENVIRONMENT
 PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
 PHONEME ~ FREE_VARIATION / DESCRIPTION_OF_ENVIRONMENT
 PHONEME+PHONEME >~ FREE_VARIATION_FOR_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
-"""
+""".format(glottocode)
 
 
 while already_exists:
