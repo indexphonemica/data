@@ -57,7 +57,7 @@ In some cases, phonemes may be too underspecified or under-described to be easil
 
 In cases where an entire cluster or sequence has a specific realization, such as English /nð/ > [n̪ː], join the source phonemes in the sequence with a plus sign: `n+ð > n̪ː`. If this rule has no conditioning factor outside the cluster itself, the `/ environment` component may be omitted.
 
-For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. For cases of free variation among obligatory conditioned allophones, such as `t > s ~ ts / _i` in Rotokas, use `>` followed 
+For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. For cases of free variation among obligatory conditioned allophones, such as `t > s ~ ts / _i` in Rotokas, use `>` and separate the variants with `~`.
 
 # Non-IPA conventions
 
