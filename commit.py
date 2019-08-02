@@ -65,6 +65,9 @@ def validate(doculect):
 	if phonemes[0] == 'REQUIRED':
 		raise Exception('No phonemes given')
 
+	if 'y' in phonemes:
+		print('Warning: /y/ listed in phonemes - make sure you don\'t mean /j/!')
+
 	canonical_phonemes = [phoneme.split('|')[0] for phoneme in phonemes]
 
 	# -- Allophonic rules tests --
