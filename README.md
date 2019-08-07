@@ -53,7 +53,7 @@ In some cases, phonemes may be too underspecified or under-described to be easil
 
 - The source must be a phoneme listed in `phonemes`.
 - The realization must be a phoneme.
-- The environment may be free-form text.
+- The environment is optional, and may be free-form text.
 
 In cases where an entire cluster or sequence has a specific realization, such as English /nð/ > [n̪ː], join the source phonemes in the sequence with a plus sign: `n+ð > n̪ː`. If this rule has no conditioning factor outside the cluster itself, the `/ environment` component may be omitted.
 

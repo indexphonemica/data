@@ -5,11 +5,14 @@ import configparser
 
 def parse_allophonic_rule(line):
 	if not re.fullmatch('[^>]+>[^\/]+\/[^>\/\n]+', line):
-		raise Exception('Invalid allophonic rule: {}'.format(line))
+		environment = None
+		if not re.fullmatch('[^>]+>[^\/]+', line):
+			raise Exception('Invalid allophonic rule: {}'.format(line))
+	else:
+		environment = re.search('/(.+)', line).group(1).strip()
 
 	phonemes = re.match('[^>]+', line).group(0).strip().split('+')
 	allophone = re.search('>([^/]+)', line).group(1).strip()
-	environment = re.search('/(.+)', line).group(1).strip()
 	rule_type = 'strict'
 
 	if allophone[0] == '~':
