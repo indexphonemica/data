@@ -3,11 +3,21 @@ import sys, re, subprocess
 from os import path
 import configparser
 
+class InvalidAllophonicRuleError(Exception):
+	pass
+class IncorrectSectionsError(Exception):
+	pass
+class MissingPropertyError(Exception):
+	pass
+class InvalidPropertyError(Exception):
+	pass
+
+
 def parse_allophonic_rule(line):
-	if not re.fullmatch('[^>]+>[^\/]+\/[^>\/\n]+', line):
+	if not re.fullmatch('[^>]+>[^\/]+\/.+', line):
 		environment = None
-		if not re.fullmatch('[^>]+>[^\/]+', line):
-			raise Exception('Invalid allophonic rule: {}'.format(line))
+		if not re.fullmatch('[^>]+>.+', line):
+			raise InvalidAllophonicRuleError(line)
 	else:
 		environment = re.search('/(.+)', line).group(1).strip()
 
@@ -36,22 +46,22 @@ def no(section, prop):
 # -- Tests -- 
 def validate(doculect):
 	if set(doculect.sections()) != set(['core', 'source', 'notes', 'phonemes', 'allophonic_rules']):
-		raise Exception('Sections are incorrect (should be core, source, notes, phonemes, allophonic_rules)')
+		raise IncorrectSectionsError('Sections are incorrect (should be core, source, notes, phonemes, allophonic_rules)')
 
 	# -- Core tests -- 
 	if no(doculect['core'], 'name'):
-		raise Exception('Missing property: core -> name')
+		raise MissingPropertyError('core -> name')
 	if no(doculect['core'], 'glottocode'):
-		raise Exception('Missing property: core -> glottocode')
+		raise MissingPropertyError('core -> glottocode')
 
 	# -- Source tests --
 	if no(doculect['source'], 'glottolog'):
 		print('Warning: No glottolog ID provided for source - are you sure?')
 		for prop in ['author', 'title', 'year']:
 			if no(doculect['source'], prop):
-				raise Exception('Missing required property for source without glottolog ID: {}'.format(prop))
+				raise MissingPropertyError('Missing required property for source without glottolog ID: {}'.format(prop))
 	elif not re.fullmatch('[0-9]+', doculect['source']['glottolog']):
-		raise Exception('Invalid source glottolog ID: {}'.format(doculect['source']['glottolog']))
+		raise InvalidPropertyError('Invalid source glottolog ID: {}'.format(doculect['source']['glottolog']))
 
 	if no(doculect['source'], 'url'):
 		print('Warning: No URL provided for source - are you sure?')
@@ -63,10 +73,10 @@ def validate(doculect):
 	phonemes = list(doculect['phonemes'])
 
 	if set(phonemes) != set(doculect['phonemes']):
-		raise Exception('Duplicate phoneme')
+		raise InvalidPropertyError('Duplicate phoneme')
 
 	if phonemes[0] == 'REQUIRED':
-		raise Exception('No phonemes given')
+		raise MissingPropertyError('No phonemes given')
 
 	if 'y' in phonemes:
 		print('Warning: /y/ listed in phonemes - make sure you don\'t mean /j/!')
@@ -78,7 +88,7 @@ def validate(doculect):
 		rule = parse_allophonic_rule(rule_raw)
 		for phoneme in rule['phonemes']:
 			if phoneme not in canonical_phonemes:
-				raise Exception('Phoneme {} in rule {} not listed as canonical in phonemes section'.format(phoneme, rule))
+				raise InvalidPropertyError('Phoneme {} in rule {} not listed as canonical in phonemes section'.format(phoneme, rule))
 
 	return True
 
