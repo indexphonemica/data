@@ -75,7 +75,7 @@ def validate(doculect):
 	if set(phonemes) != set(doculect['phonemes']):
 		raise InvalidPropertyError('Duplicate phoneme')
 
-	if phonemes[0] == 'REQUIRED':
+	if len(phonemes) == 0 or phonemes[0] == 'required':
 		raise MissingPropertyError('No phonemes given')
 
 	if 'y' in phonemes:
