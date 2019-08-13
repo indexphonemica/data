@@ -43,6 +43,9 @@ def no(section, prop):
 		return True
 	return False
 
+def get_canonical(phoneme):
+	return re.sub(r'[\(\)\{\}]', '', phoneme.split('|')[0])
+
 # -- Tests -- 
 def validate(doculect):
 	if set(doculect.sections()) != set(['core', 'source', 'notes', 'phonemes', 'allophonic_rules']):
@@ -81,7 +84,7 @@ def validate(doculect):
 	if 'y' in phonemes:
 		print('Warning: /y/ listed in phonemes - make sure you don\'t mean /j/!')
 
-	canonical_phonemes = [phoneme.split('|')[0] for phoneme in phonemes]
+	canonical_phonemes = [get_canonical(phoneme) for phoneme in phonemes]
 
 	# -- Allophonic rules tests --
 	for rule_raw in doculect['allophonic_rules']:

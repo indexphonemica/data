@@ -343,11 +343,13 @@ class CorrectTest(unittest.TestCase):
 				a
 				i
 				u|o
+				(f)
 
 				[allophonic_rules]
 				p > b / V_V
 				t > s ~ ts / _i
 				t > ɾ
+				f > h / _a
 				a+i >~ e"""), True)
 
 if __name__ == '__main__':
