@@ -63,6 +63,8 @@ For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. 
 
 For fricated or 'super-close' vowels such as the 'apical vowel' of Mandarin, use the Sinological characters: `ɿ` instead of `i̝` or `z̩`, `ʮ` instead of `y̝` or `ʑ̩ʷ`, and so on. For the fricated back rounded vowel, use `ꭒ` instead of `v̩`.
 
+The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
+
 # Example
 
 An example file, `roto1249-1.ini`, is given below.
