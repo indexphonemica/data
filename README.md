@@ -12,9 +12,10 @@ Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes
 - `name`: the name of the doculect as given in the source
 - `glottocode`: the Glottocode of the language
 
-And two optional attributes:
-- `notes`: Any notes relevant to the entry.
+And three optional attributes:
+- `notes`: any notes relevant to the entry
 - `dialect`: the Glottocode of the specific dialect, if one is defined
+- `dialect_name`: the name of the specific dialect as given in the source, if a specific dialect is referenced
 
 ### `source`
 
