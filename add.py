@@ -1,49 +1,95 @@
 #!/usr/bin/env python3
-import sys, re
+import sys, re, argparse
 from os import path
+import configparser
 
-glottocode = sys.argv[1]
-i = 0
-already_exists = True
+def validate_glottocode(glottocode):
+	if not re.match('[a-z]{4}[0-9]{4}', glottocode):
+		raise Exception('Invalid glottocode')
 
-# TODO: regex match glottocode
-if not re.match('[a-z]{4}[0-9]{4}', glottocode):
-	raise Exception('Invalid glottocode')
+def format_path(glottocode, i):
+	return 'doculects/{}-{}.ini'.format(glottocode, i)
 
-blank_file = """[core]
-name = REQUIRED
-glottocode = {}
-dialect = OPTIONAL
+def find_path(glottocode):
+	i = 0
+	already_exists = True
+	while already_exists:
+		i += 1
+		if not path.exists(format_path(glottocode, i)):
+			already_exists = False
+	return format_path(glottocode, i)
 
-[source]
-glottolog = IDEAL
-url = IDEAL
-author = OPTIONAL (but REQUIRED if there's no glottolog ID)
-title = OPTIONAL (but REQUIRED if there's no glottolog ID)
-publisher = OPTIONAL
-volume = OPTIONAL
-number = OPTIONAL
-year = OPTIONAL (but REQUIRED if there's no glottolog ID)
-pages = OPTIONAL
+def maybe(obj, key, otherwise=None):
+	if key in obj:
+		return obj[key]
+	else:
+		return otherwise
 
-[notes]
-OPTIONAL
+def from_bibkey(glottocode, bibkey, name):
+	"""Look up source info from the Glottolog bibkey of the source.
+	You'll probably want to change GLOTTOLOG_PATH here."""
+	GLOTTOLOG_PATH = path.expanduser('~/Documents/glottolog-3.4')
 
-[phonemes]
-REQUIRED
+	from pyglottolog import Glottolog
+	g = Glottolog(GLOTTOLOG_PATH)
 
-[allophonic_rules]
-PHONEME > IPA_REALIZATION / DESCRIPTION_OF_ENVIRONMENT
-PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
-PHONEME ~ FREE_VARIATION / DESCRIPTION_OF_ENVIRONMENT
-PHONEME+PHONEME >~ FREE_VARIATION_FOR_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
-""".format(glottocode)
+	languoid = g.languoid(glottocode)	
+	ref = [x for x in languoid.sources if x.key == bibkey]
+	if not ref:
+		raise Exception('Reference not found')
 
+	source = ref[0].get_source(g)
+	return source.fields
 
-while already_exists:
-	i += 1
-	if not path.exists('doculects/{}-{}.ini'.format(glottocode, i)):
-		already_exists = False
+if __name__ == '__main__':
+	parser = argparse.ArgumentParser(description='Initialize a new inventory file from a Glottocode or Glottolog bibkey.')
 
-with open('doculects/{}-{}.ini'.format(glottocode, i), 'w') as out:
-	out.write(blank_file)
+	parser.add_argument('glottocode', metavar='glottocode', type=str, help='The Glottocode of the doculect.')
+	parser.add_argument('-b', '--bibkey', dest='bibkey', nargs='?', default=None, help='The Glottolog bibkey of the source.')
+	parser.add_argument('-n', '--name', dest='name', nargs='?', default='REQUIRED', help='The name of the doculect as given in the source.')
+
+	args = parser.parse_args()
+	validate_glottocode(args.glottocode)
+
+	if args.bibkey:
+		ref_info = from_bibkey(args.glottocode, args.bibkey, args.name)
+	else:
+		ref_info = {}
+
+	ini_path = find_path(args.glottocode)
+
+	# build the file
+	ini = configparser.ConfigParser(allow_no_value=True)
+	ini['core'] = {
+		'name': args.name
+	,	'glottocode': args.glottocode
+	,	'dialect': 'OPTIONAL'
+	,	'dialect_name': 'OPTIONAL'
+	}
+
+	ini['source'] = {
+		'glottolog': (args.bibkey if args.bibkey else 'IDEAL')
+	,	'url':       "OPTIONAL"
+	,	'author':    maybe(ref_info, 'author',    "OPTIONAL (but REQUIRED if there's no glottolog ID)")
+	,	'title':     maybe(ref_info, 'title',     "OPTIONAL (but REQUIRED if there's no glottolog ID)")
+	,	'publisher': maybe(ref_info, 'publisher', "OPTIONAL")
+	,	'volume':    maybe(ref_info, 'volume',    "OPTIONAL")
+	,	'number':    maybe(ref_info, 'number',    "OPTIONAL")
+	,	'year':      maybe(ref_info, 'year',      "OPTIONAL (but REQUIRED if there's no glottolog ID)")
+	,   'pages':     maybe(ref_info, 'pages',     "OPTIONAL")
+	}
+
+	ini['phonemes'] = {
+		'REQUIRED': None
+	}
+
+	ini['allophonic_rules'] = {
+		'PHONEME > IPA_REALIZATION / DESCRIPTION_OF_ENVIRONMENT': None
+	,	'PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
+	,	'PHONEME ~ FREE_VARIATION / DESCRIPTION_OF_ENVIRONMENT': None
+	,	'PHONEME+PHONEME >~ FREE_VARIATION_FOR_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
+	}
+
+	with open(ini_path, 'w') as out:
+		ini.write(out)
+	print(ini_path)
