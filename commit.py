@@ -65,6 +65,10 @@ def validate(doculect):
 				raise MissingPropertyError('Missing required property for source without glottolog ID: {}'.format(prop))
 	# TODO: check glottolog ID properly with pyglottolog
 
+	if not(no(doculect['source'], 'author')):
+		if ',' not in doculect['source']['author']:
+			raise InvalidPropertyError('Missing comma in author field - should be Lastname, Firstname; Lastname, Firstname etc.')
+
 	if no(doculect['source'], 'url'):
 		print('Warning: No URL provided for source - are you sure?')
 
