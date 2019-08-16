@@ -47,6 +47,7 @@ if __name__ == '__main__':
 	parser.add_argument('glottocode', metavar='glottocode', type=str, help='The Glottocode of the doculect.')
 	parser.add_argument('-b', '--bibkey', dest='bibkey', nargs='?', default=None, help='The Glottolog bibkey of the source.')
 	parser.add_argument('-n', '--name', dest='name', nargs='?', default='REQUIRED', help='The name of the doculect as given in the source.')
+	parser.add_argument('--simple', dest='simple', action='store_const', const='simple', default=False, help='Simple mode (omit unfilled optional keys and phoneme/allophone default text)')
 
 	args = parser.parse_args()
 	validate_glottocode(args.glottocode)
@@ -79,16 +80,27 @@ if __name__ == '__main__':
 	,   'pages':     maybe(ref_info, 'pages',     "OPTIONAL")
 	}
 
-	ini['phonemes'] = {
-		'REQUIRED': None
-	}
+	if args.simple:
+		for key in ini['core'].keys():
+			if ini['core'][key] == 'OPTIONAL':
+				ini['core'].pop(key)
+		for key in ini['source'].keys():
+			if ini['source'][key] == 'OPTIONAL':
+				ini['source'].pop(key)
 
-	ini['allophonic_rules'] = {
-		'PHONEME > IPA_REALIZATION / DESCRIPTION_OF_ENVIRONMENT': None
-	,	'PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
-	,	'PHONEME ~ FREE_VARIATION / DESCRIPTION_OF_ENVIRONMENT': None
-	,	'PHONEME+PHONEME >~ FREE_VARIATION_FOR_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
-	}
+		ini['phonemes'] = {}
+		ini['allophonic_rules'] = {}
+	else:
+		ini['phonemes'] = {
+			'REQUIRED': None
+		}
+
+		ini['allophonic_rules'] = {
+			'PHONEME > IPA_REALIZATION / DESCRIPTION_OF_ENVIRONMENT': None
+		,	'PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
+		,	'PHONEME ~ FREE_VARIATION / DESCRIPTION_OF_ENVIRONMENT': None
+		,	'PHONEME+PHONEME >~ FREE_VARIATION_FOR_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
+		}
 
 	with open(ini_path, 'w') as out:
 		ini.write(out)
