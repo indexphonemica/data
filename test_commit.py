@@ -1,15 +1,15 @@
 import unittest
-from commit import validate
+import commit
 import configparser
 
 def v(str):
 	c = configparser.ConfigParser(allow_no_value=True)
 	c.read_string(string=str)
-	return validate(c)
+	return commit.validate(c)
 
 class CoreTest(unittest.TestCase):
 	def test_sections(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.IncorrectSectionsError):
 			v("""[core]
 				name = Test
 				glottocode = test1234
@@ -32,7 +32,7 @@ class CoreTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_core_name(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				glottocode = test1234
 
@@ -55,8 +55,8 @@ class CoreTest(unittest.TestCase):
 				t > s ~ ts / _i
 				u >~ o / _""")
 
-	def test_core_glottolog(self):
-		with self.assertRaises(Exception):
+	def test_core_glottocode(self):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = Test
 
@@ -80,7 +80,7 @@ class CoreTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_core_name_required(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = REQUIRED
 				glottocode = test1234
@@ -105,7 +105,7 @@ class CoreTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_core_glottocode_required(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = Test
 				glottocode = REQUIRED
@@ -130,7 +130,7 @@ class CoreTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_core_null_name(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name
 				glottocode = test1234
@@ -155,7 +155,7 @@ class CoreTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_core_null_glottocode(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = Test
 				glottocode
@@ -180,7 +180,7 @@ class CoreTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_core_blank_name(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name =   
 				glottocode = test1234
@@ -206,7 +206,7 @@ class CoreTest(unittest.TestCase):
 
 class SourceTest(unittest.TestCase):
 	def test_no_glottolog_no_author(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = Test
 				glottocode = test1234
@@ -232,7 +232,7 @@ class SourceTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_invalid_glottolog(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.InvalidPropertyError):
 			v("""[core]
 				name = Test
 				glottocode = test1234
@@ -258,13 +258,13 @@ class SourceTest(unittest.TestCase):
 
 class PhonemesTest(unittest.TestCase):
 	def test_no_phonemes(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = Test
 				glottocode = test1234
 
 				[source]
-				glottolog = fakeid
+				glottolog = 1234
 				url = http://example.com/
 
 				[notes]
@@ -276,13 +276,13 @@ class PhonemesTest(unittest.TestCase):
 				""")
 
 	def test_phonemes_REQUIRED(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(commit.MissingPropertyError):
 			v("""[core]
 				name = Test
 				glottocode = test1234
 
 				[source]
-				glottolog = fakeid
+				glottolog = 1234
 				url = http://example.com/
 
 				[notes]
@@ -294,13 +294,13 @@ class PhonemesTest(unittest.TestCase):
 				""")
 
 	def test_no_duplicate_phonemes(self):
-		with self.assertRaises(Exception):
+		with self.assertRaises(configparser.DuplicateOptionError):
 			v("""[core]
 				name = Test
 				glottocode = test1234
 
 				[source]
-				glottolog = fakeid
+				glottolog = 1234
 				url = http://example.com/
 
 				[notes]
@@ -342,12 +342,15 @@ class CorrectTest(unittest.TestCase):
 				k
 				a
 				i
-				u
+				u|o
+				(f)
 
 				[allophonic_rules]
 				p > b / V_V
 				t > s ~ ts / _i
-				u >~ o / _"""), True)
+				t > ɾ
+				f > h / _a
+				a+i >~ e"""), True)
 
 if __name__ == '__main__':
 	unittest.main()

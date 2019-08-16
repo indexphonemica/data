@@ -12,9 +12,10 @@ Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes
 - `name`: the name of the doculect as given in the source
 - `glottocode`: the Glottocode of the language
 
-And two optional attributes:
-- `notes`: Any notes relevant to the entry.
+And three optional attributes:
+- `notes`: any notes relevant to the entry
 - `dialect`: the Glottocode of the specific dialect, if one is defined
+- `dialect_name`: the name of the specific dialect as given in the source, if a specific dialect is referenced
 
 ### `source`
 
@@ -53,7 +54,7 @@ In some cases, phonemes may be too underspecified or under-described to be easil
 
 - The source must be a phoneme listed in `phonemes`.
 - The realization must be a phoneme.
-- The environment may be free-form text.
+- The environment is optional, and may be free-form text.
 
 In cases where an entire cluster or sequence has a specific realization, such as English /nð/ > [n̪ː], join the source phonemes in the sequence with a plus sign: `n+ð > n̪ː`. If this rule has no conditioning factor outside the cluster itself, the `/ environment` component may be omitted.
 
@@ -62,6 +63,8 @@ For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. 
 # Non-IPA conventions
 
 For fricated or 'super-close' vowels such as the 'apical vowel' of Mandarin, use the Sinological characters: `ɿ` instead of `i̝` or `z̩`, `ʮ` instead of `y̝` or `ʑ̩ʷ`, and so on. For the fricated back rounded vowel, use `ꭒ` instead of `v̩`.
+
+The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
 
 # Example
 
