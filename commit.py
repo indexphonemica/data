@@ -63,8 +63,7 @@ def validate(doculect):
 		for prop in ['author', 'title', 'year']:
 			if no(doculect['source'], prop):
 				raise MissingPropertyError('Missing required property for source without glottolog ID: {}'.format(prop))
-	elif not re.fullmatch('[0-9]+', doculect['source']['glottolog']):
-		raise InvalidPropertyError('Invalid source glottolog ID: {}'.format(doculect['source']['glottolog']))
+	# TODO: check glottolog ID properly with pyglottolog
 
 	if no(doculect['source'], 'url'):
 		print('Warning: No URL provided for source - are you sure?')
