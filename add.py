@@ -88,9 +88,11 @@ if __name__ == '__main__':
 			if ini['source'][key] == 'OPTIONAL':
 				ini['source'].pop(key)
 
+		ini['notes'] = {}
 		ini['phonemes'] = {}
 		ini['allophonic_rules'] = {}
 	else:
+		ini['notes'] = {'OPTIONAL': None}
 		ini['phonemes'] = {
 			'REQUIRED': None
 		}
