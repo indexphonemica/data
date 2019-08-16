@@ -28,7 +28,7 @@ def maybe(obj, key, otherwise=None):
 def from_bibkey(glottocode, bibkey, name):
 	"""Look up source info from the Glottolog bibkey of the source.
 	You'll probably want to change GLOTTOLOG_PATH here."""
-	GLOTTOLOG_PATH = path.expanduser('~/Documents/glottolog-3.4')
+	GLOTTOLOG_PATH = path.expanduser('~/Documents/glottolog-4.0')
 
 	from pyglottolog import Glottolog
 	g = Glottolog(GLOTTOLOG_PATH)
