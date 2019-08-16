@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import sys, re, argparse
 from os import path
 import configparser
@@ -104,6 +105,6 @@ if __name__ == '__main__':
 		,	'PHONEME+PHONEME >~ FREE_VARIATION_FOR_CLUSTER / DESCRIPTION_OF_ENVIRONMENT': None
 		}
 
-	with open(ini_path, 'w') as out:
+	with open(ini_path, 'w', encoding='utf-8') as out:
 		ini.write(out)
 	print(ini_path)
