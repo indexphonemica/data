@@ -21,16 +21,40 @@ def parse_allophonic_rule(line):
 	else:
 		environment = re.search('/(.+)', line).group(1).strip()
 
-	phonemes = re.match('[^>]+', line).group(0).strip().split('+')
+	phonemes = [p.strip() for p in re.match('[^>]+', line).group(0).strip().split('+')]
 	allophone = re.search('>([^/]+)', line).group(1).strip()
 	rule_type = 'strict'
 
 	if allophone[0] == '~':
 		allophone = allophone[1:].strip()
 		rule_type = 'variant'
-	allophones = allophone.split('~')
+	allophones = [a.strip() for a in allophone.split('~')]
 
 	return {'phonemes': phonemes, 'allophones': allophones, 'environment': environment, 'rule_type': rule_type}
+
+def parse_phoneme(line):
+	marginal = False
+	loan = False
+
+	maybe_marginal = re.match('\((.+)\)', line)
+	if maybe_marginal:
+		line = maybe_marginal[1]
+		marginal = True
+
+	maybe_loan = re.match('\{(.+)\}', line)
+	if maybe_loan:
+		line = maybe_loan[1]
+		loan = True
+
+	forms = line.split('|')
+	canonical_form = forms[0]
+
+	return {
+		'canonical_form':     canonical_form,
+		'noncanonical_forms': forms[1:],
+		'marginal':           marginal,
+		'loan':               loan
+	}
 
 def no(section, prop):
 	if prop not in section:
