@@ -36,12 +36,12 @@ def parse_phoneme(line):
 	marginal = False
 	loan = False
 
-	maybe_marginal = re.match('\((.+)\)', line)
+	maybe_marginal = re.search('\((.+)\)', line)
 	if maybe_marginal:
 		line = maybe_marginal[1]
 		marginal = True
 
-	maybe_loan = re.match('\{(.+)\}', line)
+	maybe_loan = re.search('\{(.+)\}', line)
 	if maybe_loan:
 		line = maybe_loan[1]
 		loan = True
@@ -90,7 +90,7 @@ def validate(doculect):
 	# TODO: check glottolog ID properly with pyglottolog
 
 	if not(no(doculect['source'], 'author')):
-		if ',' not in doculect['source']['author']:
+		if ',' not in doculect['source']['author'] and doculect['source']['author'] != 'Unknown':
 			raise InvalidPropertyError('Missing comma in author field - should be Lastname, Firstname; Lastname, Firstname etc.')
 
 	if no(doculect['source'], 'url'):

@@ -2,6 +2,12 @@ import unittest
 import commit
 import configparser
 
+# TODO: 
+# - test phoneme dups where one is marginal/loan and one isn't
+# - reject if there are multiple >s
+# - invalid phonemes tests
+# - actually test glottolog bibkeys, ideally with pyglottolog
+
 def v(str):
 	c = configparser.ConfigParser(allow_no_value=True)
 	c.read_string(string=str)
@@ -232,7 +238,6 @@ class SourceTest(unittest.TestCase):
 				u >~ o / _""")
 
 	def test_invalid_glottolog(self):
-		# TODO - we'll need to change all the existing test glottolog bibkeys too
 		pass
 
 class PhonemesTest(unittest.TestCase):
@@ -297,8 +302,6 @@ class PhonemesTest(unittest.TestCase):
 				p > b / V_V
 				t > s ~ ts / _i
 				u >~ o / _""")
-	# TODO: invalid phonemes tests
-
 
 
 class CorrectTest(unittest.TestCase):

@@ -292,10 +292,15 @@ def find_or_create_language(glottocode, sql):
     if len(g_languoid.lineage) > 1:
         genus = g_languoid.lineage[1][0]
 
+    # sometimes this is blank
+    family = 'Unknown'
+    if g_languoid.family:
+        family = g_languoid.family.name
+
     language['name']       = g_languoid.name
     language['glottocode'] = glottocode 
     language['iso6393']    = g_languoid.iso           # are .iso and .iso_code the same?
-    language['family']     = (g_languoid.family.name or 'Isolate')
+    language['family']     = family
     language['genus']      = genus # note that .lineage returns (name, glottocode, <family>) - we'll only store the name for now; easier to search
     language['macroarea']  = g_languoid.macroareas[0].value # English only has Eurasia, so I assume these only have one
     language['latitude']   = g_languoid.latitude
