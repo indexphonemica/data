@@ -61,7 +61,11 @@ For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. 
 
 # Non-IPA conventions
 
-For fricated or 'super-close' vowels such as the 'apical vowel' of Mandarin, use the Sinological characters: `ɿ` instead of `i̝` or `z̩`, `ʮ` instead of `y̝` or `ʑ̩ʷ`, and so on. For the fricated back rounded vowel, use `ꭒ` instead of `v̩`.
+The frication diacritic is carried over from PHOIBLE: for example, the voiced velar lateral fricative is `ʟ͓`.
+
+The retroflex lateral flap is written `ɺ̢`.
+
+Fricated or 'super-close' vowels such as Mandarin -i are written with the Sinological characters: `ɿ` instead of `i͓` or `z̩`, `ʮ` instead of `y͓` or `ʑ̩ʷ`, and so on. The fricated back rounded or labiodentalized vowel is `ꭒ`.
 
 The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
 
