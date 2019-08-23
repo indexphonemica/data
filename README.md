@@ -69,6 +69,8 @@ Fricated or 'super-close' vowels such as Mandarin -i are written with the Sinolo
 
 The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
 
+`ʵ` replaces `˞` as a marker of rhoticity.
+
 # Example
 
 An example file, `roto1249-1.ini`, is given below.
