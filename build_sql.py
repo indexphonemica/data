@@ -4,14 +4,19 @@
 import psycopg2
 import pyglottolog
 import configparser
-from os import path
+import os.path
 from glob import glob
 from collections import OrderedDict
 from commit import parse_phoneme, parse_allophonic_rule, validate
 from add import maybe
 
-GLOTTOLOG_PATH = path.expanduser('~/Documents/glottolog-4.0')
+GLOTTOLOG_PATH = os.path.expanduser('~/Documents/glottolog-4.0')
 glottolog = pyglottolog.Glottolog(GLOTTOLOG_PATH)
+
+# Harmonize with Pshrimp for now; fix them both later.
+DOCULECT_NAME_COL = 'language_name'
+DOC_SEG_JOIN_TBL  = 'doculect_segments'
+SEGMENT_COL       = 'phoneme'
 
 schema = '''\
     languages (                                 \
@@ -26,8 +31,9 @@ schema = '''\
         longitude FLOAT                         \
     )
     doculects (                                                  \
-        id SERIAL PRIMARY KEY,                                  \
-        name VARCHAR(255) NOT NULL,                              \
+        id SERIAL PRIMARY KEY,                                   \
+        inventory_id VARCHAR(255) NOT NULL,                      \
+        {DOCULECT_NAME_COL} VARCHAR(255) NOT NULL,               \
         glottocode VARCHAR(255) NOT NULL,                        \
         dialect VARCHAR(255),                                    \
         dialect_name VARCHAR(255),                               \
@@ -57,7 +63,7 @@ schema = '''\
     )
     segments (                                \
         id SERIAL PRIMARY KEY,                \
-        segment VARCHAR(255) NOT NULL,        \
+        {SEGMENT_COL} VARCHAR(255) NOT NULL,  \
         glyph_id VARCHAR(255),                \
         segment_class VARCHAR(255),           \
         tone VARCHAR(255),                    \
@@ -98,7 +104,7 @@ schema = '''\
         implosive VARCHAR(255),               \
         click VARCHAR(255)                    \
     )
-    doculect_phonemes (                                      \
+    {DOC_SEG_JOIN_TBL} (                                     \
         id SERIAL PRIMARY KEY,                               \
         doculect_id INTEGER NOT NULL,                        \
         segment_id INTEGER NOT NULL,                         \
@@ -115,10 +121,10 @@ schema = '''\
         variation BOOLEAN NOT NULL,                                        \
         compound VARCHAR(255),                                             \
         environment VARCHAR(255),                                          \
-        FOREIGN KEY(doculect_phoneme_id) REFERENCES doculect_phonemes(id), \
+        FOREIGN KEY(doculect_phoneme_id) REFERENCES {DOC_SEG_JOIN_TBL}(id),\
         FOREIGN KEY(allophone_id) REFERENCES segments(id)                  \
     )\
-'''
+'''.format(DOCULECT_NAME_COL=DOCULECT_NAME_COL, SEGMENT_COL=SEGMENT_COL, DOC_SEG_JOIN_TBL=DOC_SEG_JOIN_TBL)
 
 # -----------
 # -- utils --
@@ -170,11 +176,13 @@ def read_ini(path, sql):
     validate(ini)
 
     doculect = OrderedDict()
+
+    doculect['inventory_id'] = os.path.split(path)[-1][:-4] # get the filename minus the .ini
     
-    doculect['name']         = ini['core']['name']
-    doculect['glottocode']   = ini['core']['glottocode']
-    doculect['dialect']      = maybe(ini['core'], 'dialect')
-    doculect['dialect_name'] = maybe(ini['core'], 'dialect_name')
+    doculect[DOCULECT_NAME_COL] = ini['core']['name']
+    doculect['glottocode']      = ini['core']['glottocode']
+    doculect['dialect']         = maybe(ini['core'], 'dialect')
+    doculect['dialect_name']    = maybe(ini['core'], 'dialect_name')
 
     doculect['notes'] = '\n'.join(maybe(ini, 'notes', []))
     if doculect['notes'] == '':
@@ -225,7 +233,7 @@ def read_ini(path, sql):
         allophonic_rules += form_rules
 
         # Then build the doculect_phonemes, and save them in a mapping of phoneme -> doculect_phoneme_id for this doculect.
-        insert('doculect_phonemes', OrderedDict({
+        insert(DOC_SEG_JOIN_TBL, OrderedDict({
             'doculect_id': doculect_id
         ,   'segment_id' : canonical_form_id
         ,   'marginal'   : phoneme['marginal']
@@ -265,9 +273,9 @@ def read_ini(path, sql):
                 insert('allophones', rule, sql=sql)
 
 def find_or_create_segment(segment, sql):
-    segment_id = get_id('segments', 'segment', segment, sql=sql)
+    segment_id = get_id('segments', SEGMENT_COL, segment, sql=sql)
     if not segment_id:
-        insert('segments', OrderedDict({'segment': segment}), return_id=True, sql=sql)
+        insert('segments', OrderedDict({SEGMENT_COL: segment}), return_id=True, sql=sql)
         segment_id = sql.fetchone()[0]
     return segment_id
 
