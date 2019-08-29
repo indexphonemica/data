@@ -71,6 +71,17 @@ The IPA palatal series is here interpreted as velar palatals; coronal palatals a
 
 `ʵ` replaces `˞` as a marker of rhoticity.
 
+# Other conventions
+
+The non-syllabicity diacritic is used on diphthongs when:
+
+- it is used in the source
+- every diphthong given in the source is closing, with the possible exception of close-to-close diphthongs (since in these cases, it's likely that all diphthongs are falling in prominence)
+
+If diphthongs that are not closing or close-to-close are present and the source does not use the non-syllabicity diacritic, it is not used.
+
+For example, if a source lists a diphthong inventory of /ai au ei eu oi ou iu/, these diphthongs will be input as /ai̯ au̯ ei̯ eu̯ oi̯ ou̯ iu̯/. But if a source lists /ai au ea oa/, these will be input as /ai au ea oa/, since it isn't clear whether /ea oa/ are falling or rising in prominence.
+
 # Example
 
 An example file, `roto1249-1.ini`, is given below.
