@@ -80,7 +80,9 @@ The non-syllabicity diacritic is used on diphthongs when:
 
 If diphthongs that are not closing or close-to-close are present and the source does not use the non-syllabicity diacritic, it is not used.
 
-For example, if a source lists a diphthong inventory of /ai au ei eu oi ou iu/, these diphthongs will be input as /ai̯ au̯ ei̯ eu̯ oi̯ ou̯ iu̯/. But if a source lists /ai au ea oa/, these will be input as /ai au ea oa/, since it isn't clear whether /ea oa/ are falling or rising in prominence.
+For example, if a source lists a diphthong inventory of /ai au ei eu oi ou iu/, these diphthongs will be input as /ai̯ au̯ ei̯ eu̯ oi̯ ou̯ iu̯/. But if a source lists /ai au ea oa/, these will be input as /ai au ea oa/, since it isn't clear whether /ea oa/ are falling or rising in prominence. 
+
+SIL Organized Phonology Data sheets almost always list the low vowel as /ɑ/ rather than /a/. In these cases, /a/ will be input unless the low vowel is clearly described to be backed.
 
 # Example
 
