@@ -117,12 +117,12 @@ schema = '''\
     )
     allophones (                                                           \
         id SERIAL PRIMARY KEY,                                             \
-        doculect_phoneme_id INTEGER NOT NULL,                              \
+        doculect_segment_id INTEGER NOT NULL,                              \
         allophone_id INTEGER NOT NULL,                                     \
         variation BOOLEAN NOT NULL,                                        \
         compound VARCHAR(255),                                             \
         environment VARCHAR(255),                                          \
-        FOREIGN KEY(doculect_phoneme_id) REFERENCES {DOC_SEG_JOIN_TBL}(id),\
+        FOREIGN KEY(doculect_segment_id) REFERENCES {DOC_SEG_JOIN_TBL}(id),\
         FOREIGN KEY(allophone_id) REFERENCES segments(id)                  \
     )\
 '''.format(DOCULECT_NAME_COL=DOCULECT_NAME_COL, SEGMENT_COL=SEGMENT_COL, DOC_SEG_JOIN_TBL=DOC_SEG_JOIN_TBL)
@@ -224,7 +224,7 @@ def read_ini(path, sql):
     # Rules with + in the output are just ignored, because I don't know how they should be handled, and see above re: deadlines.
     # Maybe we want NoSQL for the final DB.
 
-    doculect_phoneme_ids = {}
+    doculect_segment_ids = {}
     for phoneme_txt in phonemes:
         phoneme = parse_phoneme(phoneme_txt)
         canonical_form_id = find_or_create_segment(phoneme['canonical_form'], sql=sql)
@@ -234,14 +234,14 @@ def read_ini(path, sql):
         form_rules = [parse_allophonic_rule(form_rule_str.format(phoneme['canonical_form'], noncanonical_form)) for noncanonical_form in noncanonical_forms]
         allophonic_rules += form_rules
 
-        # Then build the doculect_phonemes, and save them in a mapping of phoneme -> doculect_phoneme_id for this doculect.
+        # Then build the doculect_segments, and save them in a mapping of phoneme -> doculect_segment_id for this doculect.
         insert(DOC_SEG_JOIN_TBL, OrderedDict({
             'doculect_id': doculect_id
         ,   'segment_id' : canonical_form_id
         ,   'marginal'   : phoneme['marginal']
         ,   'loan'       : phoneme['loan']
         }), return_id=True, sql=sql)
-        doculect_phoneme_ids[phoneme['canonical_form']] = sql.fetchone()[0]
+        doculect_segment_ids[phoneme['canonical_form']] = sql.fetchone()[0]
 
     # ...then the allophones...
     for allophonic_rule in allophonic_rules:
@@ -266,7 +266,7 @@ def read_ini(path, sql):
             
             for phoneme in allophonic_rule['phonemes']:
                 rule = OrderedDict({
-                    'doculect_phoneme_id': doculect_phoneme_ids[phoneme]
+                    'doculect_segment_id': doculect_segment_ids[phoneme]
                 ,   'allophone_id':        allophone_segment_id
                 ,   'variation':           allophonic_rule['rule_type'] == 'variant'
                 ,   'compound':            len(allophonic_rule['phonemes']) > 1
