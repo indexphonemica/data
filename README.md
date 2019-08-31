@@ -4,7 +4,7 @@
 
 Doculect entries are stored as Python INI files, named with the Glottocode of the language followed by a hyphen and an index number: `1` for the first entry for that Glottocode, `2` for the second, etc. 
 
-Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes`, and `allophonic_rules`.
+Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes`, and `allophonic_rules`. An optional `todo` section is also permitted.
 
 ### `core`
 
@@ -33,7 +33,7 @@ Enough information should be given that the paper can be found. At the minimum, 
 
 ### `notes`
 
-`notes` stores notes relevant to the doculect entry. (For TODOs, add the literal string TODO.)
+`notes` stores notes relevant to the doculect entry.
 
 ### `phonemes`
 

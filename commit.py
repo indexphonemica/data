@@ -72,7 +72,7 @@ def get_canonical(phoneme):
 
 # -- Tests -- 
 def validate(doculect):
-	if set(doculect.sections()) != set(['core', 'source', 'notes', 'phonemes', 'allophonic_rules']):
+	if any([x not in doculect.sections() for x in ['core', 'source', 'notes', 'phonemes', 'allophonic_rules']]):
 		raise IncorrectSectionsError('Sections are incorrect (should be core, source, notes, phonemes, allophonic_rules)')
 
 	# -- Core tests -- 
