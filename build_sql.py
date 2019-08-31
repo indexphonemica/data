@@ -269,7 +269,7 @@ def read_ini(path, sql):
                     'doculect_segment_id': doculect_segment_ids[phoneme]
                 ,   'allophone_id':        allophone_segment_id
                 ,   'variation':           allophonic_rule['rule_type'] == 'variant'
-                ,   'compound':            len(allophonic_rule['phonemes']) > 1
+                ,   'compound':            '+'.join(allophonic_rule['phonemes']) if len(allophonic_rule['phonemes']) > 1 else None
                 ,   'environment':         allophonic_rule['environment']
                 })
                 insert('allophones', rule, sql=sql)
