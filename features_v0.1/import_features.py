@@ -113,7 +113,7 @@ SEGMENT_FILTER = set([
 
 if __name__ == '__main__':
     # Import segments
-    with open('segments.csv', encoding='utf-8') as f:
+    with open('segments_v01.csv', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         i = 0
         finished_segments = set()
