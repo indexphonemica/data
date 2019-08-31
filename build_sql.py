@@ -43,6 +43,7 @@ schema = '''\
         source_bibkey VARCHAR(255),                              \
         source_url TEXT,                                         \
         source_author TEXT,                                      \
+        source_doi VARCHAR(255),                                 \
         source_title VARCHAR(255),                               \
         source_publisher VARCHAR(255),                           \
         source_volume VARCHAR(255),                              \
@@ -169,7 +170,7 @@ def dinsert(table, d, keys, sql):
 # ----------------------
 
 def read_ini(path, sql):
-    ini = configparser.ConfigParser(allow_no_value=True)
+    ini = configparser.ConfigParser(allow_no_value=True, delimiters=('=',))
     ini.optionxform = str # make fields case-sensitive
     ini.read(path, encoding='utf-8')
 
@@ -197,6 +198,7 @@ def read_ini(path, sql):
     doculect['source_number']    = maybe(ini['source'], 'number')
     doculect['source_year']      = maybe(ini['source'], 'year')
     doculect['source_pages']     = maybe(ini['source'], 'pages')
+    doculect['source_doi']       = maybe(ini['source'], 'doi')
 
     phonemes = list(ini['phonemes'])
     allophonic_rules = [parse_allophonic_rule(a) for a in ini['allophonic_rules']]
