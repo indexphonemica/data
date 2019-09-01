@@ -4,7 +4,7 @@
 
 Doculect entries are stored as Python INI files, named with the Glottocode of the language followed by a hyphen and an index number: `1` for the first entry for that Glottocode, `2` for the second, etc. 
 
-Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes`, and `allophonic_rules`.
+Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes`, and `allophonic_rules`. An optional `todo` section is also permitted.
 
 ### `core`
 
@@ -12,8 +12,7 @@ Entry files have five headers: `core`, `source`, (optionally) `notes`, `phonemes
 - `name`: the name of the doculect as given in the source
 - `glottocode`: the Glottocode of the language
 
-And three optional attributes:
-- `notes`: any notes relevant to the entry
+And two optional attributes:
 - `dialect`: the Glottocode of the specific dialect, if one is defined
 - `dialect_name`: the name of the specific dialect as given in the source, if a specific dialect is referenced
 
@@ -34,7 +33,7 @@ Enough information should be given that the paper can be found. At the minimum, 
 
 ### `notes`
 
-`notes` stores notes relevant to the doculect entry. (For TODOs, add the literal string TODO.)
+`notes` stores notes relevant to the doculect entry.
 
 ### `phonemes`
 
@@ -62,9 +61,28 @@ For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. 
 
 # Non-IPA conventions
 
-For fricated or 'super-close' vowels such as the 'apical vowel' of Mandarin, use the Sinological characters: `ɿ` instead of `i̝` or `z̩`, `ʮ` instead of `y̝` or `ʑ̩ʷ`, and so on. For the fricated back rounded vowel, use `ꭒ` instead of `v̩`.
+The frication diacritic is carried over from PHOIBLE: for example, the voiced velar lateral fricative is `ʟ͓`.
+
+The retroflex lateral flap is written `ɺ̢`.
+
+Fricated or 'super-close' vowels such as Mandarin -i are written with the Sinological characters: `ɿ` instead of `i͓` or `z̩`, `ʮ` instead of `y͓` or `ʑ̩ʷ`, and so on. The fricated back rounded or labiodentalized vowel is `ꭒ`.
 
 The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
+
+`ʵ` replaces `˞` as a marker of rhoticity.
+
+# Other conventions
+
+The non-syllabicity diacritic is used on diphthongs when:
+
+- it is used in the source
+- every diphthong given in the source is closing, with the possible exception of close-to-close diphthongs (since in these cases, it's likely that all diphthongs are falling in prominence)
+
+If diphthongs that are not closing or close-to-close are present and the source does not use the non-syllabicity diacritic, it is not used.
+
+For example, if a source lists a diphthong inventory of /ai au ei eu oi ou iu/, these diphthongs will be input as /ai̯ au̯ ei̯ eu̯ oi̯ ou̯ iu̯/. But if a source lists /ai au ea oa/, these will be input as /ai au ea oa/, since it isn't clear whether /ea oa/ are falling or rising in prominence. 
+
+SIL Organized Phonology Data sheets almost always list the low vowel as /ɑ/ rather than /a/. In these cases, /a/ will be input unless the low vowel is clearly described to be backed.
 
 # Example
 

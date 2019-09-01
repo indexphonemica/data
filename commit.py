@@ -21,16 +21,40 @@ def parse_allophonic_rule(line):
 	else:
 		environment = re.search('/(.+)', line).group(1).strip()
 
-	phonemes = re.match('[^>]+', line).group(0).strip().split('+')
+	phonemes = [p.strip() for p in re.match('[^>]+', line).group(0).strip().split('+')]
 	allophone = re.search('>([^/]+)', line).group(1).strip()
 	rule_type = 'strict'
 
 	if allophone[0] == '~':
 		allophone = allophone[1:].strip()
 		rule_type = 'variant'
-	allophones = allophone.split('~')
+	allophones = [a.strip() for a in allophone.split('~')]
 
 	return {'phonemes': phonemes, 'allophones': allophones, 'environment': environment, 'rule_type': rule_type}
+
+def parse_phoneme(line):
+	marginal = False
+	loan = False
+
+	maybe_marginal = re.search('\((.+)\)', line)
+	if maybe_marginal:
+		line = maybe_marginal[1]
+		marginal = True
+
+	maybe_loan = re.search('\{(.+)\}', line)
+	if maybe_loan:
+		line = maybe_loan[1]
+		loan = True
+
+	forms = line.split('|')
+	canonical_form = forms[0]
+
+	return {
+		'canonical_form':     canonical_form,
+		'noncanonical_forms': forms[1:],
+		'marginal':           marginal,
+		'loan':               loan
+	}
 
 def no(section, prop):
 	if prop not in section:
@@ -48,7 +72,7 @@ def get_canonical(phoneme):
 
 # -- Tests -- 
 def validate(doculect):
-	if set(doculect.sections()) != set(['core', 'source', 'notes', 'phonemes', 'allophonic_rules']):
+	if any([x not in doculect.sections() for x in ['core', 'source', 'notes', 'phonemes', 'allophonic_rules']]):
 		raise IncorrectSectionsError('Sections are incorrect (should be core, source, notes, phonemes, allophonic_rules)')
 
 	# -- Core tests -- 
@@ -63,8 +87,11 @@ def validate(doculect):
 		for prop in ['author', 'title', 'year']:
 			if no(doculect['source'], prop):
 				raise MissingPropertyError('Missing required property for source without glottolog ID: {}'.format(prop))
-	elif not re.fullmatch('[0-9]+', doculect['source']['glottolog']):
-		raise InvalidPropertyError('Invalid source glottolog ID: {}'.format(doculect['source']['glottolog']))
+	# TODO: check glottolog ID properly with pyglottolog
+
+	if not(no(doculect['source'], 'author')):
+		if ',' not in doculect['source']['author'] and doculect['source']['author'] != 'Unknown':
+			raise InvalidPropertyError('Missing comma in author field - should be Lastname, Firstname; Lastname, Firstname etc.')
 
 	if no(doculect['source'], 'url'):
 		print('Warning: No URL provided for source - are you sure?')
