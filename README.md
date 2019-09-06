@@ -65,7 +65,16 @@ The frication diacritic is carried over from PHOIBLE: for example, the voiced ve
 
 The retroflex lateral flap is written `ɺ̢`.
 
-Fricated or 'super-close' vowels such as Mandarin -i are written with the Sinological characters: `ɿ` instead of `i͓` or `z̩`, `ʮ` instead of `y͓` or `ʑ̩ʷ`, and so on. The fricated back rounded or labiodentalized vowel is `ꭒ`.
+Fricated or 'super-close' vowels such as Mandarin -i are written with extensions of the Sinological characters: 
+- `ɿ` instead of `z̩`
+- `ʅ` instead of `ʒ̩`
+- `ʅʵ` instead of `ʐ̩`
+- `ɿʲ` instead of `ʑ̩`
+- `ꭒ` instead of `v̩`
+
+There may eventually be a `ʮ` series also, but we haven't needed one yet.
+
+The retraction diacritic on vowels is used in the Tibeto-Burman manner, to represent the 'tight throat' quality or 'tense voice' that appears in Liangshan Yi and Bai.
 
 The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
 
