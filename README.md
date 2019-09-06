@@ -61,22 +61,28 @@ For cases of free variation, such as Nuosu `m+ɨ >~ m̩`, use the digraph `>~`. 
 
 # Non-IPA conventions
 
+## Consonants
+
 The frication diacritic is carried over from PHOIBLE: for example, the voiced velar lateral fricative is `ʟ͓`.
 
 The retroflex lateral flap is written `ɺ̢`.
 
+The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
+
+Affricates and consonants with bilabially trilled release are assumed to agree in voice unless otherwise specified.
+
+## Vowels 
+
 Fricated or 'super-close' vowels such as Mandarin -i are written with extensions of the Sinological characters: 
 - `ɿ` instead of `z̩`
-- `ʅ` instead of `ʒ̩`
-- `ʅʵ` instead of `ʐ̩`
-- `ɿʲ` instead of `ʑ̩`
+- `ɿᶾ` instead of `ʒ̩`
+- `ʅ` instead of `ʐ̩`
+- `ɿᶽ` instead of `ʑ̩`
 - `ꭒ` instead of `v̩`
 
 There may eventually be a `ʮ` series also, but we haven't needed one yet.
 
 The retraction diacritic on vowels is used in the Tibeto-Burman manner, to represent the 'tight throat' quality or 'tense voice' that appears in Liangshan Yi and Bai.
-
-The IPA palatal series is here interpreted as velar palatals; coronal palatals are represented by the Sinological `ȶ` series.
 
 `ʵ` replaces `˞` as a marker of rhoticity.
 
