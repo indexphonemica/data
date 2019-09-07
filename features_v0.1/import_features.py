@@ -1,10 +1,10 @@
 from inflection import underscore
 from collections import OrderedDict
-import csv, psycopg2
+import csv, sqlite3
 
 def init_db():
-    conn_string = "dbname=indexphonemica user=postgres password=postgres"
-    conn = psycopg2.connect(conn_string)
+    conn_string = "../iphon.sqlite"
+    conn = sqlite3.connect(conn_string)
     sql = conn.cursor()
     return (conn, sql)
 
@@ -16,15 +16,15 @@ SEGMENT_COL = 'phoneme'
 def get_id(table, field, value, sql = sql):
     '''Get (assumed to be unique) id of the thing in `table` where `field` = `value`. Returns False if it's not there.'''
     # NB: Passing table/column names as parameters doesn't work. This does not appear to be documented.
-    sql.execute('SELECT id FROM {} WHERE {} = %s'.format(table, field), (value,))
+    sql.execute('SELECT id FROM {} WHERE {} = ?'.format(table, field), (value,))
     res = sql.fetchone()
     return res[0] if res else None
 
 def update(table, props, column, value, sql = sql):
     '''Insert OrderedDict `props` ({col_name: prop}) into `table`.'''
-    s = "UPDATE segments SET {} WHERE {SEGMENT_COL} = %s".format(
+    s = "UPDATE segments SET {} WHERE {SEGMENT_COL} = ?".format(
         ','.join(
-            ["{} = %s".format(k, props[k]) for k in props.keys()]
+            ["{} = ?".format(k, props[k]) for k in props.keys()]
         ), SEGMENT_COL=SEGMENT_COL
     )
     sql.execute(s, (*props.values(), value,))
