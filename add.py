@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys, re, argparse
 from os import path
-import configparser
+import iphon_configparser
 
 def validate_glottocode(glottocode):
 	if not re.match('[a-z]{4}[0-9]{4}', glottocode):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
 	ini_path = find_path(args.glottocode)
 
 	# build the file
-	ini = configparser.ConfigParser(allow_no_value=True)
+	ini = iphon_configparser.parser()
 	ini['core'] = {
 		'name': args.name
 	,	'glottocode': args.glottocode

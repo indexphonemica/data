@@ -3,10 +3,10 @@
 
 import psycopg2
 import pyglottolog
-import configparser
 import os.path
 from glob import glob
 from collections import OrderedDict
+import iphon_configparser
 from commit import parse_phoneme, parse_allophonic_rule, validate
 from add import maybe
 
@@ -170,8 +170,7 @@ def dinsert(table, d, keys, sql):
 # ----------------------
 
 def read_ini(path, sql):
-    ini = configparser.ConfigParser(allow_no_value=True, delimiters=('=',))
-    ini.optionxform = str # make fields case-sensitive
+    ini = iphon_configparser.parser()
     ini.read(path, encoding='utf-8')
 
     validate(ini)
