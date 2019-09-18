@@ -75,7 +75,7 @@ def from_sil_pacific(id_or_url):
 	if 'Date Created:' in res and res['Date Created:'][0] != 'n.d.':
 		year = int(re.match('([0-9]+)', res['Date Created:'][0])[0]) # in case of e.g. 1999-03
 	elif 'Issue Date:' in res and res['Issue Date:'][0] != 'n.d.':
-		year = int(res['Issue Date:'][0])
+		year = int(re.match('([0-9]+)', res['Issue Date:'][0])[0])
 
 	pages = None
 	if 'Extent:' in res and re.match('([0-9]+) pages', res['Extent:'][0]):
