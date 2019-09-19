@@ -86,6 +86,10 @@ The retraction diacritic on vowels is used in the Tibeto-Burman manner, to repre
 
 `ʵ` replaces `˞` as a marker of rhoticity.
 
+## Tones
+
+Tone is written with Chao tone letters. The super-high _66_ tone of Bai is written ˥́.
+
 # Other conventions
 
 ## Sino-Tibetan
