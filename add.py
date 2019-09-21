@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys, re, argparse
 from os import path
-import configparser
+import iphon_configparser
 
 def validate_glottocode(glottocode):
 	if not re.match('[a-z]{4}[0-9]{4}', glottocode):
@@ -75,7 +75,7 @@ def from_sil_pacific(id_or_url):
 	if 'Date Created:' in res and res['Date Created:'][0] != 'n.d.':
 		year = int(re.match('([0-9]+)', res['Date Created:'][0])[0]) # in case of e.g. 1999-03
 	elif 'Issue Date:' in res and res['Issue Date:'][0] != 'n.d.':
-		year = int(res['Issue Date:'][0])
+		year = int(re.match('([0-9]+)', res['Issue Date:'][0])[0])
 
 	pages = None
 	if 'Extent:' in res and re.match('([0-9]+) pages', res['Extent:'][0]):
@@ -110,10 +110,13 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Initialize a new inventory file from a Glottocode or Glottolog bibkey.')
 
 	parser.add_argument('glottocode', metavar='glottocode', type=str, help='The Glottocode of the doculect.')
-	parser.add_argument('-b', '--bibkey', dest='bibkey', nargs='?', default=None, help='The Glottolog bibkey of the source.')
-	parser.add_argument('--sp', dest='sil_pacific', nargs='?', default=None, help='The SIL Pacific URL of the source page, or the ID in /resources/archives. (https://www.silpacific.org/resources/archives/#####)')
-	parser.add_argument('-n', '--name', dest='name', nargs='?', default='REQUIRED', help='The name of the doculect as given in the source.')
+	parser.add_argument('-b', '--bibkey',    dest='bibkey',       nargs='?', default=None, help='The Glottolog bibkey of the source.')
+	parser.add_argument('--sp',              dest='sil_pacific',  nargs='?', default=None, help='The SIL Pacific URL of the source page, or the ID in /resources/archives. (https://www.silpacific.org/resources/archives/#####)')
+	parser.add_argument('-n', '--name',      dest='name',         nargs='?', default='REQUIRED', help='The name of the doculect as given in the source.')
+	parser.add_argument('-d', '--dialect-name', dest='dialect_name', nargs='?', default='OPTIONAL', help='The name of the dialect.')
 	parser.add_argument('--simple', dest='simple', action='store_const', const='simple', default=False, help='Simple mode (omit unfilled optional keys and phoneme/allophone default text)')
+
+	parser.add_argument('-t', dest='phon_invs_tb', action='store_const', const='phon_invs_tb', default=False, help='Add language from Phonological Inventories of Tibeto-Burman Languages')
 
 	args = parser.parse_args()
 	validate_glottocode(args.glottocode)
@@ -125,15 +128,22 @@ if __name__ == '__main__':
 	if args.sil_pacific:
 		ref_info.update(from_sil_pacific(args.sil_pacific))
 
+	if args.phon_invs_tb:
+		args.simple = True
+		args.bibkey = 'hh:hld:Namkung:Tibeto-Burman'
+		ref_info.update(from_bibkey(args.glottocode, args.bibkey))
+		ref_info['url'] = 'https://stedt.berkeley.edu/pubs_and_prods/STEDT_Monograph3_Phonological-Inv-TB.pdf'
+		ref_info['author'] = 'Namkung, Ju'
+
 	ini_path = find_path(args.glottocode)
 
 	# build the file
-	ini = configparser.ConfigParser(allow_no_value=True)
+	ini = iphon_configparser.parser()
 	ini['core'] = {
 		'name': args.name
 	,	'glottocode': args.glottocode
 	,	'dialect': 'OPTIONAL'
-	,	'dialect_name': 'OPTIONAL'
+	,	'dialect_name': args.dialect_name
 	}
 
 	ini['source'] = {

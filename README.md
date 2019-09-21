@@ -86,8 +86,16 @@ The retraction diacritic on vowels is used in the Tibeto-Burman manner, to repre
 
 `ʵ` replaces `˞` as a marker of rhoticity.
 
+## Tones
+
+Tone is written with Chao tone letters. The super-high _66_ tone of Bai is written ˥́.
+
 # Other conventions
 
+## Sino-Tibetan
+Inventories of 'eroded' Sino-Tibetan languages are typically given as onsets, rimes, and tones. We convert these to inventories of consonants and vowels, and err on the side of segmental simplicity, although complex rimes may be represented as unit segments in certain cases where we can identify good reason to do so.
+
+## Non-syllabicity
 The non-syllabicity diacritic is used on diphthongs when:
 
 - it is used in the source
@@ -97,6 +105,7 @@ If diphthongs that are not closing or close-to-close are present and the source 
 
 For example, if a source lists a diphthong inventory of /ai au ei eu oi ou iu/, these diphthongs will be input as /ai̯ au̯ ei̯ eu̯ oi̯ ou̯ iu̯/. But if a source lists /ai au ea oa/, these will be input as /ai au ea oa/, since it isn't clear whether /ea oa/ are falling or rising in prominence. 
 
+## SIL OPDs 
 SIL Organized Phonology Data sheets almost always list the low vowel as /ɑ/ rather than /a/. In these cases, /a/ will be input unless the low vowel is clearly described to be backed.
 
 # Example
