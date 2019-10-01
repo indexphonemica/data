@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys, re, subprocess
 from os import path
-import configparser
+import iphon_configparser
 
 class InvalidAllophonicRuleError(Exception):
 	pass
@@ -124,7 +124,7 @@ def validate(doculect):
 
 if __name__ == '__main__':
 	filename = sys.argv[1]
-	doculect = configparser.ConfigParser(allow_no_value=True)
+	doculect = iphon_configparser.parser()
 	doculect.read(path.join('doculects', '{}.ini'.format(filename)), encoding='utf-8')
 	validate(doculect) # if it's invalid, this will throw an exception
 	subprocess.run(['git', 'add', path.join('doculects', '{}.ini'.format(filename))])

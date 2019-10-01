@@ -1,6 +1,6 @@
 import unittest
 import commit
-import configparser
+import iphon_configparser
 
 # TODO: 
 # - test phoneme dups where one is marginal/loan and one isn't
@@ -9,7 +9,7 @@ import configparser
 # - actually test glottolog bibkeys, ideally with pyglottolog
 
 def v(str):
-	c = configparser.ConfigParser(allow_no_value=True)
+	c = iphon_configparser.parser()
 	c.read_string(string=str)
 	return commit.validate(c)
 
