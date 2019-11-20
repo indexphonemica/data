@@ -184,4 +184,10 @@ if __name__ == '__main__':
 
 	with open(ini_path, 'w', encoding='utf-8') as out:
 		ini.write(out)
+	if args.sil_pacific:
+		with open('last_sp.txt', 'w', encoding='utf-8') as out:
+			out.write(args.sil_pacific)
+	elif args.phon_invs_tb:
+		with open('last_tb.txt', 'w', encoding='utf-8') as out:
+			out.write(args.name)
 	print(ini_path)

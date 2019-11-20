@@ -1,7 +1,7 @@
 # I have a self-imposed deadline for this but something else just came up, so here be dragons. Sorry.
 # The eventual plan is to have everything be in Haskell - this is only for v0.1.
 
-import sqlite3
+import psycopg2
 import pyglottolog
 import os.path
 from glob import glob
@@ -20,7 +20,7 @@ SEGMENT_COL       = 'phoneme'
 
 schema = '''\
     languages (                                 \
-        id INTEGER NOT NULL PRIMARY KEY,                  \
+        id SERIAL PRIMARY KEY,                  \
         name VARCHAR(255),                      \
         glottocode VARCHAR(255) NOT NULL,       \
         iso6393 VARCHAR(255),                   \
@@ -31,7 +31,7 @@ schema = '''\
         longitude FLOAT                         \
     )
     doculects (                                                  \
-        id INTEGER NOT NULL PRIMARY KEY,                                   \
+        id SERIAL PRIMARY KEY,                                   \
         inventory_id VARCHAR(255) NOT NULL,                      \
         {DOCULECT_NAME_COL} VARCHAR(255) NOT NULL,               \
         glottocode VARCHAR(255) NOT NULL,                        \
@@ -63,7 +63,7 @@ schema = '''\
         UNIQUE(language_id, country_id)                    \
     )
     segments (                                \
-        id INTEGER NOT NULL PRIMARY KEY,                \
+        id SERIAL PRIMARY KEY,                \
         {SEGMENT_COL} VARCHAR(255) NOT NULL,  \
         glyph_id VARCHAR(255),                \
         segment_class VARCHAR(255),           \
@@ -106,7 +106,7 @@ schema = '''\
         click VARCHAR(255)                    \
     )
     {DOC_SEG_JOIN_TBL} (                                     \
-        id INTEGER NOT NULL PRIMARY KEY,                               \
+        id SERIAL PRIMARY KEY,                               \
         doculect_id INTEGER NOT NULL,                        \
         segment_id INTEGER NOT NULL,                         \
         marginal BOOLEAN,                                    \
@@ -116,7 +116,7 @@ schema = '''\
         UNIQUE (doculect_id, segment_id)                     \
     )
     allophones (                                                           \
-        id INTEGER NOT NULL PRIMARY KEY,                                             \
+        id SERIAL PRIMARY KEY,                                             \
         doculect_segment_id INTEGER NOT NULL,                              \
         allophone_id INTEGER NOT NULL,                                     \
         variation BOOLEAN NOT NULL,                                        \
@@ -132,8 +132,8 @@ schema = '''\
 # -----------
 
 def init_db():
-    conn_string = "iphon.sqlite"
-    conn = sqlite3.connect(conn_string)
+    conn_string = "dbname=indexphonemica user=postgres password=postgres"
+    conn = psycopg2.connect(conn_string)
     sql = conn.cursor()
     build_schema = [f'CREATE TABLE IF NOT EXISTS {table}' for table in schema.split('\n')]
     for t in build_schema:
@@ -144,14 +144,16 @@ def init_db():
 def get_id(table, field, value, sql):
     '''Get (assumed to be unique) id of the thing in `table` where `field` = `value`. Returns False if it's not there.'''
     # NB: Passing table/column names as parameters doesn't work. This does not appear to be documented.
-    sql.execute('SELECT id FROM {} WHERE {} = ?'.format(table, field), (value,))
+    sql.execute('SELECT id FROM {} WHERE {} = %s'.format(table, field), (value,))
     res = sql.fetchone()
     return res[0] if res else None
 
-def insert(table, props, sql):
+def insert(table, props, sql, return_id=True):
     '''Insert OrderedDict `props` ({col_name: prop}) into `table`.'''
     # ON CONFLICT REPLACE for allophones - looks like there's a lot of dups.
-    s = 'INSERT INTO {} ({}) VALUES ({})'.format(table, ','.join(props.keys()), ','.join([f':{val}' for val in props.keys()]))
+    s = 'INSERT INTO {} ({}) VALUES ({}) ON CONFLICT DO NOTHING'.format(table, ','.join(props.keys()), ','.join([f'%({val})s' for val in props.keys()]))
+    if return_id:
+        s += ' RETURNING id'
     sql.execute(s, props)
 
 def dfilter(d, keys):
@@ -197,12 +199,15 @@ def read_ini(path, sql):
     doculect['source_pages']     = maybe(ini['source'], 'pages')
     doculect['source_doi']       = maybe(ini['source'], 'doi')
 
+    if doculect['source_year'] == 'Unknown':
+        doculect['source_year'] = None
+
     phonemes = list(ini['phonemes'])
     allophonic_rules = [parse_allophonic_rule(a) for a in ini['allophonic_rules']]
 
     # Start writing - first the doculect...
-    insert('doculects', doculect, sql=sql)
-    doculect_id = sql.lastrowid
+    insert('doculects', doculect, return_id=True, sql=sql)
+    doculect_id = sql.fetchone()[0]
     # ...then the language, if necessary...
     language_id = find_or_create_language(doculect['glottocode'], sql=sql)
     # ...then the segments... 
@@ -237,8 +242,8 @@ def read_ini(path, sql):
         ,   'segment_id' : canonical_form_id
         ,   'marginal'   : phoneme['marginal']
         ,   'loan'       : phoneme['loan']
-        }), sql=sql)
-        doculect_segment_ids[phoneme['canonical_form']] = sql.lastrowid
+        }), return_id=True, sql=sql)
+        doculect_segment_ids[phoneme['canonical_form']] = sql.fetchone()[0]
 
     # ...then the allophones...
     for allophonic_rule in allophonic_rules:
@@ -274,8 +279,8 @@ def read_ini(path, sql):
 def find_or_create_segment(segment, sql):
     segment_id = get_id('segments', SEGMENT_COL, segment, sql=sql)
     if not segment_id:
-        insert('segments', OrderedDict({SEGMENT_COL: segment}), sql=sql)
-        segment_id = sql.lastrowid
+        insert('segments', OrderedDict({SEGMENT_COL: segment}), return_id=True, sql=sql)
+        segment_id = sql.fetchone()[0]
     return segment_id
 
 def find_or_create_language(glottocode, sql):
@@ -313,19 +318,19 @@ def find_or_create_language(glottocode, sql):
     language['latitude']   = g_languoid.latitude
     language['longitude']  = g_languoid.longitude
 
-    insert('languages', language, sql=sql)
-    language_id = sql.lastrowid
+    insert('languages', language, return_id=True, sql=sql)
+    language_id = sql.fetchone()[0]
 
     # country stuff
     for country in g_languoid.countries:
         country_id = get_id('countries', 'id', country.id, sql=sql)
         if not country_id:
             insert('countries', OrderedDict({'id': country.id, 'name': country.name}), sql=sql)
-            country_id = sql.lastrowid
+            country_id = sql.fetchone()[0] # `insert` returns an ID; this is how we get it
         insert('languages_countries', OrderedDict({
             'language_id': language_id,
             'country_id':  country_id
-            }), sql=sql)
+            }), return_id=False, sql=sql) # these don't have IDs so don't try to return one
 
     return language_id
 
