@@ -7,7 +7,7 @@ import os.path
 from glob import glob
 from collections import OrderedDict
 import iphon_configparser
-from commit import parse_phoneme, parse_allophonic_rule, validate
+from commit import parse_phoneme, parse_allophonic_rule, validate, INI_DEFAULTS
 from add import maybe
 
 GLOTTOLOG_PATH = os.path.expanduser('~/Documents/glottolog-4.0')
@@ -188,16 +188,16 @@ def read_ini(path, sql):
     if doculect['notes'] == '':
         doculect['notes'] = None
 
-    doculect['source_bibkey']    = maybe(ini['source'], 'glottolog')
-    doculect['source_url']       = maybe(ini['source'], 'url')
-    doculect['source_author']    = maybe(ini['source'], 'author')
-    doculect['source_title']     = maybe(ini['source'], 'title')
-    doculect['source_publisher'] = maybe(ini['source'], 'publisher')
-    doculect['source_volume']    = maybe(ini['source'], 'volume')
-    doculect['source_number']    = maybe(ini['source'], 'number')
-    doculect['source_year']      = maybe(ini['source'], 'year')
-    doculect['source_pages']     = maybe(ini['source'], 'pages')
-    doculect['source_doi']       = maybe(ini['source'], 'doi')
+    doculect['source_bibkey']    = maybe(ini['source'], 'glottolog', filters=INI_DEFAULTS)
+    doculect['source_url']       = maybe(ini['source'], 'url', filters=INI_DEFAULTS)
+    doculect['source_author']    = maybe(ini['source'], 'author', filters=INI_DEFAULTS)
+    doculect['source_title']     = maybe(ini['source'], 'title', filters=INI_DEFAULTS)
+    doculect['source_publisher'] = maybe(ini['source'], 'publisher', filters=INI_DEFAULTS)
+    doculect['source_volume']    = maybe(ini['source'], 'volume', filters=INI_DEFAULTS)
+    doculect['source_number']    = maybe(ini['source'], 'number', filters=INI_DEFAULTS)
+    doculect['source_year']      = maybe(ini['source'], 'year', filters=INI_DEFAULTS)
+    doculect['source_pages']     = maybe(ini['source'], 'pages', filters=INI_DEFAULTS)
+    doculect['source_doi']       = maybe(ini['source'], 'doi', filters=INI_DEFAULTS)
 
     if doculect['source_year'] == 'Unknown':
         doculect['source_year'] = None
