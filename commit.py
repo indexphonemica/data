@@ -56,12 +56,14 @@ def parse_phoneme(line):
 		'loan':               loan
 	}
 
+INI_DEFAULTS = set(['REQUIRED', 'IDEAL', 'OPTIONAL', 'OPTIONAL (but REQUIRED if there\'s no glottolog ID)'])
+
 def no(section, prop):
 	if prop not in section:
 		return True
 	if section[prop] is None:
 		return True
-	if section[prop] in set(['REQUIRED', 'IDEAL', 'OPTIONAL', 'OPTIONAL (but REQUIRED if there\'s no glottolog ID)']):
+	if section[prop] in INI_DEFAULTS:
 		return True
 	if section[prop] == '':
 		return True

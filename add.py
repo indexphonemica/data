@@ -20,8 +20,8 @@ def find_path(glottocode):
 			already_exists = False
 	return format_path(glottocode, i)
 
-def maybe(obj, key, otherwise=None):
-	if key in obj and obj[key]:
+def maybe(obj, key, otherwise=None, filters=None):
+	if key in obj and obj[key] and (filters is None or obj[key] not in filters):
 		return obj[key]
 	else:
 		return otherwise
@@ -72,9 +72,9 @@ def from_sil_pacific(id_or_url):
 		title = soup.find(id='page-title').find('h2', 'page-title').text
 
 	year = None
-	if 'Date Created:' in res and res['Date Created:'][0] != 'n.d.':
+	if 'Date Created:' in res and res['Date Created:'][0] not in set(['n.d.', 'nd']):
 		year = int(re.match('([0-9]+)', res['Date Created:'][0])[0]) # in case of e.g. 1999-03
-	elif 'Issue Date:' in res and res['Issue Date:'][0] != 'n.d.':
+	elif 'Issue Date:' in res and res['Issue Date:'][0] not in set(['n.d.', 'nd']):
 		year = int(re.match('([0-9]+)', res['Issue Date:'][0])[0])
 
 	pages = None
