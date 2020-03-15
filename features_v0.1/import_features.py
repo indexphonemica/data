@@ -50,7 +50,6 @@ def munge_key(k):
 
 def munge_value(v):
     value_replacements = {
-        '0': None,      # for segment features
         'NA': None,     # for marginal, allophones, etc.
         'None': None,   
         'FALSE': False, # for marginal
