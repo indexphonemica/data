@@ -35,6 +35,10 @@ Enough information should be given that the paper can be found. At the minimum, 
 
 `notes` stores notes relevant to the doculect entry.
 
+### `phonotactics`
+
+`phonotactics` stores information about the language's syllable structure; currently this contains only two fields, `max_initial` and `max_final`. If a doculect's source does not provide the necessary information, the special value `no_info` may be stored in this field to reflect this.
+
 ### `phonemes`
 
 `phonemes` stores a set of phonemes, separated by newlines.
