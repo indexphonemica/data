@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import iphon_configparser
 from glob import glob
 import argparse
