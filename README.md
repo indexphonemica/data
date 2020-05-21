@@ -132,6 +132,10 @@ pages = 271-276
 glottolog = 110896
 url = https://www.jstor.org/stable/30029468
 
+[phonotactics]
+max_initial = 1
+max_final = 0
+
 [phonemes]
 p
 t
@@ -173,6 +177,10 @@ volume = OPTIONAL
 number = OPTIONAL
 year = OPTIONAL (but REQUIRED if there's no glottolog ID)
 pages = OPTIONAL
+
+[phonotactics]
+max_initial = REQUIRED IF no_info IS NOT PRESENT
+max_final = REQUIRED IF no_info IS NOT PRESENT
 
 [phonemes]
 REQUIRED
