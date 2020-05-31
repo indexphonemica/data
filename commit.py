@@ -98,6 +98,18 @@ def validate(doculect):
 	if no(doculect['source'], 'url'):
 		print('Warning: No URL provided for source - are you sure?')
 
+	# -- Phonotactics tests --
+	if 'phonotactics' in doculect and not('no_info' in doculect['phonotactics']):
+		if 'max_initial' not in doculect['phonotactics']:
+			raise InvalidPropertyError('Must define max_initial if phonotactics section is present')
+		if 'max_final' not in doculect['phonotactics']:
+			raise InvalidPropertyError('Must define max_final if phonotactics section is present')
+		# TODO: Some languages (e.g. Salishan) have undefined values for these; we need a way to specify that
+		if int(doculect['phonotactics']['max_initial']) == 0 or int(doculect['phonotactics']['max_initial']) > 8:
+			raise InvalidPropertyError('Value of max_initial smells funny')
+		if int(doculect['phonotactics']['max_final']) > 8:
+			raise InvalidPropertyError('Value of max_final smells funny')
+
 	# -- Phonemes tests --
 	# TODO: once we have more entries, keep a cache and warn for each new (unattested so far in IPHON) phoneme
 	# also, ensure proper diacritic ordering

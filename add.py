@@ -167,10 +167,15 @@ if __name__ == '__main__':
 				ini['source'].pop(key)
 
 		ini['notes'] = {}
+		ini['phonotactics'] = {}
 		ini['phonemes'] = {}
 		ini['allophonic_rules'] = {}
 	else:
 		ini['notes'] = {'OPTIONAL': None}
+		ini['phonotactics'] = {
+			'max_initial': 'REQUIRED IF no_info IS NOT PRESENT'
+		,	'max_final':   'REQUIRED IF no_info IS NOT PRESENT'
+		}
 		ini['phonemes'] = {
 			'REQUIRED': None
 		}
