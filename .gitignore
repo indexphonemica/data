@@ -1,4 +1,9 @@
 last-*.txt
+*.dump
+*.dump.txt
+*.bak
+*backup
+doculects_incomplete/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
