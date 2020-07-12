@@ -75,6 +75,8 @@ The IPA palatal series is here interpreted as velar palatals; coronal palatals a
 
 Affricates and consonants with bilabially trilled release are assumed to agree in voice unless otherwise specified.
 
+Prenasalized consonants are written with preceding superscript n: for example, `ⁿp` instead of `mp` or `m̥p`. Postnasalized consonants or prestopped nasals are written as digraphs: `pm̥` or `pm` (depending on whether the nasal element is voiced) instead of `pⁿ`. 
+
 ## Vowels 
 
 Fricated or 'super-close' vowels such as Mandarin -i are written with extensions of the Sinological characters: 
@@ -86,9 +88,9 @@ Fricated or 'super-close' vowels such as Mandarin -i are written with extensions
 
 There may eventually be a `ʮ` series also, but we haven't needed one yet.
 
-The retraction diacritic on vowels is used in the Tibeto-Burman manner, to represent the 'tight throat' quality or 'tense voice' that appears in Liangshan Yi and Bai.
+The retraction diacritic on vowels is used in the Tibeto-Burman manner, to represent the 'tight throat' quality or 'tense voice' that appears in Liangshan Yi and Bai. Uvularization (which appears in some Qiangic languages) is transcribed with a following `ʶ`.
 
-`ʵ` replaces `˞` as a marker of rhoticity.
+`ʵ` replaces `˞` as a marker of rhoticity. 
 
 ## Tones
 
@@ -155,7 +157,7 @@ iː|ɪː
 uː
 
 [allophonic_rules]
-t > ts / _i
+t > s ~ ts / _i
 ```
 
 # Blank file
