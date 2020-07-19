@@ -75,6 +75,8 @@ The IPA palatal series is here interpreted as velar palatals; coronal palatals a
 
 Affricates and consonants with bilabially trilled release are assumed to agree in voice unless otherwise specified.
 
+Prenasalized consonants are written with preceding superscript n: for example, `ⁿp` instead of `mp` or `m̥p`. Postnasalized consonants or prestopped nasals are written as digraphs: `pm̥` or `pm` (depending on whether the nasal element is voiced) instead of `pⁿ`. 
+
 ## Vowels 
 
 Fricated or 'super-close' vowels such as Mandarin -i are written with extensions of the Sinological characters: 
@@ -86,9 +88,9 @@ Fricated or 'super-close' vowels such as Mandarin -i are written with extensions
 
 There may eventually be a `ʮ` series also, but we haven't needed one yet.
 
-The retraction diacritic on vowels is used in the Tibeto-Burman manner, to represent the 'tight throat' quality or 'tense voice' that appears in Liangshan Yi and Bai.
+The retraction diacritic on vowels is used in the Tibeto-Burman manner, to represent the 'tight throat' quality or 'tense voice' that appears in Liangshan Yi and Bai. Uvularization (which appears in some Qiangic languages) is transcribed with a following `ʶ`.
 
-`ʵ` replaces `˞` as a marker of rhoticity.
+`ʵ` replaces `˞` as a marker of rhoticity. 
 
 ## Tones
 
@@ -155,7 +157,7 @@ iː|ɪː
 uː
 
 [allophonic_rules]
-t > ts / _i
+t > s ~ ts / _i
 ```
 
 # Blank file
@@ -194,4 +196,18 @@ PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
 
 ## `add.py`
 
-A script to create a blank doculect file. Usage: `>python add.py <glottocode>`. Prints the name of the created file.
+Creates a blank doculect file. Usage: `>python add.py <glottocode>`. Prints the name of the created file. Notable options:
+- `-h`: Display a help message listing all script options (can be used without providing a glottocode)
+- `-b <bibkey>`: Convenience option for inputting the Glottolog bibkey of the source; this will auto-fill as many of the source fields as possible, but requires a local copy of the Glottolog database and the installation of the pyglottolog library.
+- `-n <name>`: Convenience option for inputting the name of the doculect as given in the source
+- `--simple`: Omits unfilled optional keys and default text
+
+For example, `add.py roto1249 -b sil16:10670 -n Rotokas --simple`. 
+
+## `commit.py`
+
+Validates and `git add`s a provided entry in .ini format; for example, `commit.py roto1249-1`.
+
+## `stats.py`
+
+Prints statistics about the local database. Run `stats.py help` to list available reports.

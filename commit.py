@@ -11,7 +11,8 @@ class MissingPropertyError(Exception):
 	pass
 class InvalidPropertyError(Exception):
 	pass
-
+class NotFoundError(Exception):
+	pass
 
 def parse_allophonic_rule(line):
 	if not re.fullmatch('[^>]+>[^\/]+\/.+', line):
@@ -96,6 +97,7 @@ def validate(doculect):
 			if no(doculect['source'], prop):
 				raise MissingPropertyError('Missing required property for source without glottolog ID: {}'.format(prop))
 	# TODO: check glottolog ID properly with pyglottolog
+	# (but make this optional so people don't have to deal with the tedium of pyglottolog setup)
 
 	if not(no(doculect['source'], 'author')):
 		if ',' not in doculect['source']['author'] and doculect['source']['author'] != 'Unknown':
@@ -150,6 +152,14 @@ def validate(doculect):
 if __name__ == '__main__':
 	filename = sys.argv[1]
 	doculect = iphon_configparser.parser()
-	doculect.read(path.join('doculects', '{}.ini'.format(filename)), encoding='utf-8')
+	file_path = path.join('doculects', '{}.ini'.format(filename))
+
+	if not(path.isdir('doculects')):
+		raise NotFoundError('Doculects directory not found - this script must be run from the main IPHON directory')
+
+	if not(path.isfile(file_path)):
+		raise NotFoundError('File not found')
+
+	doculect.read(file_path, encoding='utf-8')
 	validate(doculect) # if it's invalid, this will throw an exception
-	subprocess.run(['git', 'add', path.join('doculects', '{}.ini'.format(filename))])
+	subprocess.run(['git', 'add', file_path])
