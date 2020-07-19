@@ -196,4 +196,18 @@ PHONEME+PHONEME > REALIZATION_OF_CLUSTER / DESCRIPTION_OF_ENVIRONMENT
 
 ## `add.py`
 
-A script to create a blank doculect file. Usage: `>python add.py <glottocode>`. Prints the name of the created file.
+Creates a blank doculect file. Usage: `>python add.py <glottocode>`. Prints the name of the created file. Notable options:
+- `-h`: Display a help message listing all script options (can be used without providing a glottocode)
+- `-b <bibkey>`: Convenience option for inputting the Glottolog bibkey of the source; this will auto-fill as many of the source fields as possible, but requires a local copy of the Glottolog database and the installation of the pyglottolog library.
+- `-n <name>`: Convenience option for inputting the name of the doculect as given in the source
+- `--simple`: Omits unfilled optional keys and default text
+
+For example, `add.py roto1249 -b sil16:10670 -n Rotokas --simple`. 
+
+## `commit.py`
+
+Validates and `git add`s a provided entry in .ini format; for example, `commit.py roto1249-1`.
+
+## `stats.py`
+
+Prints statistics about the local database. Run `stats.py help` to list available reports.
