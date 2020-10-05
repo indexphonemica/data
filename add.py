@@ -149,6 +149,7 @@ if __name__ == '__main__':
 	ini['source'] = {
 		'glottolog': (args.bibkey if args.bibkey else "IDEAL")
 	,	'url':       maybe(ref_info, 'url',       "IDEAL")
+	,	'doi':		 maybe(ref_info, 'doi',       "OPTIONAL")
 	,	'author':    maybe(ref_info, 'author',    "OPTIONAL (but REQUIRED if there's no glottolog ID)")
 	,	'title':     maybe(ref_info, 'title',     "OPTIONAL (but REQUIRED if there's no glottolog ID)")
 	,	'publisher': maybe(ref_info, 'publisher', "OPTIONAL")
