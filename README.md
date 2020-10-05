@@ -18,16 +18,16 @@ And two optional attributes:
 
 ### `source`
 
-`source` stores the following attributes:
+`source` stores many attributes, of which the most common ones are:
 - `glottolog`
 - `url`
+- `doi`
 - `author`
 - `title`
 - `publisher`
 - `volume`
 - `number`
 - `year`
-- `pages`
 
 Enough information should be given that the paper can be found. At the minimum, a Glottolog ID should be provided if one is available; other information can then be added automatically from Glottolog when a numbered release of the Index is built.
 
